@@ -1,0 +1,55 @@
+body {
+    background-color: #cccccc;
+}
+.meuconteudo {
+    background-color: #ddd;
+}
+
+.menu-superior {
+    height: 60px;
+}
+
+.banner-rotativo {
+    height:200px;
+}
+
+.sidebar {
+}
+.todo-o-conteudo {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.conteudo {
+}
+
+.rodape {
+    height: 200px;
+}
+
+.manga_list {
+    background-color: #cccccc;
+    text-rendering: optimizelegibility;
+    font-family: inherit;
+    margin-top: 5px;
+}
+
+.manga_biglist {
+    background-color: #fddfdd;
+    text-rendering: optimizelegibility;
+    font-family: inherit;
+    margin-top: 5px;
+}
+.capitulo_list {
+    background-color: #cddccd;
+    text-rendering: optimizelegibility;
+    font-family: inherit;
+    margin-top: 5px;
+    padding-left: 15px;
+}
+
+.artigo_list {
+    background-color: white;
+    text-rendering: optimizelegibility;
+    font-family: inherit;
+    padding-left: 15px;
+}

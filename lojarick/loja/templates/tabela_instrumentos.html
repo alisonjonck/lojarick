@@ -1,0 +1,26 @@
+<table id="instrumentos" class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nome</th>
+        <th>Tipo</th>
+        <th>Fabricante</th>
+        <th>Preço</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for instrumento in instrumentos %}
+      <tr class="todos {{instrumento.tipo}}">
+        <td>{{instrumento.id}}</td>
+        <td>{{instrumento.nome}}</td>
+        <td>{{instrumento.tipo}}</td>
+        <td>{{instrumento.fabricante}}</td>
+        <td>R$ {{instrumento.preco}}</td>
+        <td><a class="btn btn-primary btn-small" href="javascript:void(0);"
+             onclick="ver_instrumento({{ instrumento.id }});">Ver Mais</a></td>
+        
+      </tr>
+    {% endfor %}
+    </tbody>
+</table>

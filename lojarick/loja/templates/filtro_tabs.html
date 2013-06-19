@@ -1,0 +1,10 @@
+<ul class="nav nav-tabs" id="filtro">
+    <li class="active"><a href="javascript:void(0);" onclick="filtroTodos();" data-toggle="tab">
+        Todos</a>
+    </li>
+    {% for tipo in tipos %}
+        <li><a href="javascript:void(0);" onclick="filtroTipo('{{tipo.nome}}');" data-toggle="tab">
+            {{ tipo }}
+        </a></li>
+    {% endfor %}
+</ul>

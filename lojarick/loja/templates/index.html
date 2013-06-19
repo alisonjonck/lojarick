@@ -1,0 +1,25 @@
+{% extends "base.html" %} 
+
+{% block script %}
+<script src="{{MEDIA_URL}}js/lang.js"></script>
+{% endblock script %}
+
+
+{% block conteudo %}
+<div id="conteudo">
+    <!-- FILTRO PARA TIPOS DE INSTRUMENTO -->
+    <div id="filtro">
+        {% include "filtro_tabs.html" %}
+    </div>
+
+    <div id="ver_mais"></div>
+
+    <!-- FORMULÁRIO DE BUSCA -->
+    <div id = "busca"> </div>
+
+    <!-- TABELA DE INSTRUMENTOS -->
+    <div id="tabela">
+        {% include "tabela_instrumentos.html" %}
+    </div>
+</div>
+{% endblock conteudo %}
