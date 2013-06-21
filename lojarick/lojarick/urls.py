@@ -22,4 +22,5 @@ urlpatterns = patterns('',
     #Ajax requests
     url(r'^form_busca/$', 'loja.views.gerar_form_busca'),
     url(r'^ver_instrumento/$', 'loja.views.ver_instrumento'),
+    url(r'^buscar/$', 'loja.views.buscar'),
 )
