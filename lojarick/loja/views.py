@@ -48,7 +48,7 @@ def gerar_form_busca(request):
                 form_busca += "<select name='" + str(caract.id) + "'>"
                 form_busca += "<option value="">&nbsp;</option>"
                 for aux in TabelaRelacionamento.objects.raw('SELECT id, nome FROM ' + caract.tabela_relacionamento):
-                    form_busca += "<option value='" + str(aux.id) + "'>" + aux.nome + "</option>"
+                    form_busca += "<option value='" + aux.nome + "'>" + aux.nome + "</option>"
                 form_busca += "</select>"
             else:
                 form_busca += "<input " + caract.tipo_campo.mascara + " name='"
@@ -109,6 +109,9 @@ def ver_instrumento(request):
 
 @csrf_exempt
 def buscar(request):
+    parceiros = Parceiro.objects.all()
+    tipos = Tipo.objects.all()
+
     if request.method == "POST":
         tipo_id = request.POST["tipo"]
 
@@ -159,7 +162,7 @@ def buscar(request):
             if not caracteristica[1]:
                 consulta += "''"
             else:
-                consulta += caracteristica[1]
+                consulta += "'" + caracteristica[1] + "'" 
 
             consulta += ") or ("
             if caracteristica[1] == '':
@@ -171,7 +174,8 @@ def buscar(request):
         consulta += " group by 1,2,3,4,5 "
 
         instrumentos = InstrumentoDTO.objects.raw(consulta)
-        #instrumentos = Instrumento.objects.all()
+    else:
+        instrumentos = InstrumentoDTO.objects.raw("select   li.id as id,    li.nome as nome,    lt.nome as tipo,    lf.nome as fabricante,  li.preco as preco from loja_instrumento li left join loja_tipo lt on lt.id = li.tipo_id left join loja_fabricante lf on lf.id = li.fabricante_id")
 
     return render_to_response('index.html', locals(), context_instance=RequestContext(request))
 

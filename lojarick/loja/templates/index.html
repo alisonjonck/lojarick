@@ -23,3 +23,11 @@
     </div>
 </div>
 {% endblock conteudo %}
+
+{% block alert %}
+    {% if consulta %}
+    <div class='alert alert-block' id='sql-debug'> <a class='close' onclick="$('#sql-debug').hide();">×</a> <h4 class='alert-heading'>SQL query</h4><p>
+    {{consulta}}
+    </p></div>
+    {% endif %}
+{% endblock alert %}
