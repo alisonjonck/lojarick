@@ -29,7 +29,7 @@ def gerar_form_busca(request):
         form_busca += "<td><label for='fabricante' style='font-weight: bold; color: #3a87ad;'>Fabricante</label>"
         form_busca += "<input type='text' name='fabricante'></td>"
         form_busca += "<td><label for='preco' style='font-weight: bold; color: #3a87ad;'>Pre&ccedil;o</label>"
-        form_busca += "<div class='input-prepend input-append'><span class='add-on'>R$</span><input type='number' name='preco'></div></td>"
+        form_busca += "<div class='input-prepend input-append'><span class='add-on'>R$</span><input type='text' name='preco'></div></td>"
         form_busca += "</td></tr><tr>"
 
         contador = 0
@@ -79,7 +79,7 @@ def ver_instrumento(request):
         caracteristicas = InstrumentoCaracteristica.objects.filter(instrumento=instrumento_id)
         grid = "<table><tr><td>"
         if instrumento.foto:
-            grid += "<img src='" + instrumento.foto.url + "' width='250'/>" + "</td><td>"
+            grid += "<img src='" + instrumento.foto.url + "' width='250' style='border: 1px solid;'/>" + "</td><td>&nbsp;</td><td>"
 
         grid += "<p>Modelo: " + instrumento.nome
         grid += "</p><p>Tipo: " + instrumento.tipo.nome
@@ -89,7 +89,7 @@ def ver_instrumento(request):
         for caract in caracteristicas:
             grid += "<p>" + caract.tipo_caracteristica.nome + ": " + caract.valor + "</p>"
 
-        grid += "</td></tr><tr><td colspan=2>"
+        grid += "</td></tr><tr><td colspan=3>"
         grid += "<a style='float:right;' class='btn btn-primary' href=''> Voltar </a></td></tr></table>"
 
         data = simplejson.dumps(grid)
