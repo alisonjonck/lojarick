@@ -1,0 +1,39 @@
+<div id="conteudo">
+{% csrf_token %} {{ form.as_p }}
+
+<div id="caracteristicas">
+
+</div>
+
+</div>
+
+<script src="{{MEDIA_URL}}js/jquery.min.js"></script>
+<script src="{{MEDIA_URL}}js/jquery.maskedinput-1.2.2.js"></script>
+<script src="{{MEDIA_URL}}js/jquery.maskMoney.js"></script>
+<script>
+$(document).ready(function () {
+    $("#id_preco").maskMoney({ thousands: '.', decimal: ',', symbolStay: true });
+    $("#id_preco").prop("maxlength",12);
+});
+
+$("#id_tipo").change(function() {
+    tipo_id = $("#id_tipo").val();
+    $('#caracteristicas').empty();
+    if (tipo_id)
+    {
+        $.ajax({
+            url: '/gerar_form_caracteristica/',
+            type: "POST",
+            dataType: "json",
+
+            data: ({
+                tipo: tipo_id
+            }),
+            success: function (results) {
+                $('#caracteristicas').append(results)
+            }
+        });
+    }
+});
+
+</script>

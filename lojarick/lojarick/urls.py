@@ -16,11 +16,15 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'loja.views.index'),
+    url(r'^instrumento/add/', 'loja.views.instrumento_formulario'),
 
     url(r'^media/(.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 
     #Ajax requests
     url(r'^form_busca/$', 'loja.views.gerar_form_busca'),
     url(r'^ver_instrumento/$', 'loja.views.ver_instrumento'),
+
     url(r'^buscar/$', 'loja.views.buscar'),
+
+    url(r'^gerar_form_caracteristica/$', 'loja.views.gerar_form_cadastro'),
 )
