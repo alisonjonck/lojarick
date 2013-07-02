@@ -21,6 +21,109 @@
     <div id="tabela">
         {% include "tabela_instrumentos.html" %}
     </div>
+
+    <!-- DIV POPUP CLASS MODAL -->
+    <div class="modal fade" id="test_modal">
+        <div class="modal-header">
+            <a class="close" data-dismiss="modal">&times;</a>
+            <h3>Adicionar instrumento</h3>
+        </div>
+        <div class="modal-body" style="border: 1px solid;">
+            <div id="conteudo">
+                <form id="formNovoInstrumento">
+
+                    {# {% csrf_token %} {{ form.as_p }} #}
+                    <table>
+                        <tr>
+                            <td>
+                                <label for="modelo" style="font-weight: bold; color: #3a87ad;">Modelo</label>
+                            </td>
+                            <td>
+                                <input type="text" id="id_nome" name="modelo">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="tipo" style="font-weight: bold; color: #3a87ad;">Tipo</label>
+                            </td>
+                            <td>
+                                <select id="id_tipo" name="tipo">
+                                    <option value="">&nbsp;</option>
+                                    {% for tipo in tipos %}
+                                        <option value="{{tipo.id}}">{{tipo.nome}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="fabricante" style="font-weight: bold; color: #3a87ad;">Fabricante</label>
+                            </td>
+                            <td>
+                                <select id="id_fabricante" name="fabricante">
+                                    <option value="">&nbsp;</option>
+                                    {% for fabricante in fabricantes %}
+                                        <option value="{{fabricante.id}}">{{fabricante.nome}}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="preco" style="font-weight: bold; color: #3a87ad;">Preço</label>
+                            </td>
+                            <td>
+                                <input id="id_preco" name="preco" type="text" maxlength="12">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="foto" style="font-weight: bold; color: #3a87ad;">Foto</label>
+                            </td>
+                            <td>
+                                <input id="id_foto" name="foto" type="file">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div id="caracteristicas">
+
+                    </div>
+                </form>
+            </div>
+
+        <script>
+            $(document).ready(function () {
+                $("#id_preco").maskMoney({ thousands: '.', decimal: ',', symbolStay: true });
+
+                $("#id_tipo").change(function() {
+                    tipo_id = $("#id_tipo").val();
+                    $('#caracteristicas').empty();
+                    if (tipo_id)
+                    {
+                        $.ajax({
+                            url: '/gerar_form_caracteristica/',
+                            type: "POST",
+                            dataType: "json",
+
+                            data: ({
+                                tipo: tipo_id
+                            }),
+                            success: function (results) {
+                                $('#caracteristicas').append(results)
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Cancelar</a>
+            <a href="#" class="btn btn-primary">Salvar</a>
+        </div>
+    </div>
 </div>
 {% endblock conteudo %}
 

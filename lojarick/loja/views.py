@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from models import Instrumento, Tipo, Parceiro, TipoCaracteristica, InstrumentoCaracteristica
+from models import Instrumento, Tipo, Parceiro, TipoCaracteristica, InstrumentoCaracteristica, Fabricante
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import simplejson
 from django.http import HttpResponse
@@ -10,6 +10,9 @@ from forms import InstrumentoForm
 
 
 def index(request):
+    form = InstrumentoForm()
+    fabricantes = Fabricante.objects.all()
+
     parceiros = Parceiro.objects.all()
     tipos = Tipo.objects.all()
     instrumentos = InstrumentoDTO.objects.raw("select   li.id as id,    li.nome as nome,    lt.nome as tipo,    lf.nome as fabricante,  li.preco as preco from loja_instrumento li left join loja_tipo lt on lt.id = li.tipo_id left join loja_fabricante lf on lf.id = li.fabricante_id")
@@ -31,7 +34,7 @@ def gerar_form_cadastro(request):
     if request.is_ajax() and request.method == "POST":
         mimetype = "application/json"
         tipo_id = request.POST["tipo"]
-        form_busca = "Caracteristicas<form action='/instrumento/cadastro' style='border: 1px solid;' method='post'><table><tr>"
+        form_busca = "<form action='/instrumento/cadastro' method='post'><table><tr>"
 
         form_busca += montarFormCaracteristica(tipo_id, False)
 
@@ -71,7 +74,7 @@ def montarFormCaracteristica(tipo_id, is_search):
 
     contador = 0
     for caract in caracteristicas:
-        if contador >= 4:
+        if contador >= 4 or not is_search:
             form_busca2 += "</tr><tr>"
             contador = 0
 
@@ -79,6 +82,10 @@ def montarFormCaracteristica(tipo_id, is_search):
         form_busca2 += "<label for='"
         form_busca2 += str(caract.id) + "' style='font-weight: bold; color: #3a87ad;'>"
         form_busca2 += caract.nome + "</label>"
+
+        if not is_search:
+            form_busca2 += "</td><td>"
+
         if caract.possui_relacionamento:
             form_busca2 += "<select name='" + str(caract.id) + "'>"
             form_busca2 += "<option value="">&nbsp;</option>"

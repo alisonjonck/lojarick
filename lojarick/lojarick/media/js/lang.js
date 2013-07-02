@@ -11,13 +11,21 @@ function buscar_ajax(tipo_id) {
             tipo: tipo_id
         }),
         success: function (results) {
-            $('#busca').empty()
-            $('#ver_mais').empty()
-            $('#tabela').show()
-            $('#busca').append(results)
+            $('#busca').empty();
+            $('#ver_mais').empty();
+            $('#tabela').show();
+            $('#busca').append(results);
         }
     });
 };
+
+
+function novoInstrumento(){
+    $('#formNovoInstrumento')[0].reset();
+    $('#caracteristicas').empty();
+    $('#test_modal').modal('show');
+};
+
 
 function ver_instrumento(instrumento_id) {
     $.ajax({
