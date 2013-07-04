@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     url(r'^ver_instrumento/$', 'loja.views.ver_instrumento'),
 
     url(r'^buscar/$', 'loja.views.buscar'),
+    url(r'^add/$', 'loja.views.add'),
 
     url(r'^gerar_form_caracteristica/$', 'loja.views.gerar_form_cadastro'),
 )

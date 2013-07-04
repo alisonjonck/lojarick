@@ -10,7 +10,6 @@ from forms import InstrumentoForm
 
 
 def index(request):
-    form = InstrumentoForm()
     fabricantes = Fabricante.objects.all()
 
     parceiros = Parceiro.objects.all()
@@ -34,7 +33,7 @@ def gerar_form_cadastro(request):
     if request.is_ajax() and request.method == "POST":
         mimetype = "application/json"
         tipo_id = request.POST["tipo"]
-        form_busca = "<form action='/instrumento/cadastro' method='post'><table><tr>"
+        form_busca = "<table><tr>"
 
         form_busca += montarFormCaracteristica(tipo_id, False)
 
@@ -50,7 +49,7 @@ def gerar_form_busca(request):
         mimetype = "application/json"
         tipo_id = request.POST["tipo"]
 
-        form_busca = "<form action='/buscar/' method='post'><table><tr>"
+        form_busca = "<table><tr>"
         form_busca += "<td colspan=2><label for='nome' style='font-weight: bold; color: #3a87ad;'>Modelo</label>"
         form_busca += "<input type='hidden' value='" + tipo_id + "' style='width:428px;' name='tipo'>"
         form_busca += "<input type='text' style='width:428px;' name='nome'></td>"
@@ -102,7 +101,7 @@ def montarFormCaracteristica(tipo_id, is_search):
     if is_search:
         form_busca2 += "<td><input type='submit' class='btn title_black' value = 'Buscar' style='height: 48px;width: 90px;margin-left: 5px;'></td>"
 
-    form_busca2 += "</tr></table></form>"
+    form_busca2 += "</tr></table>"
     return form_busca2
 
 
@@ -155,6 +154,7 @@ def ver_instrumento(request):
 def buscar(request):
     parceiros = Parceiro.objects.all()
     tipos = Tipo.objects.all()
+    fabricantes = Fabricante.objects.all()
 
     if request.method == "POST":
         tipo_id = request.POST["tipo"]
@@ -162,6 +162,78 @@ def buscar(request):
         nome = request.POST["nome"]
         fabricante = request.POST["fabricante"]
         preco = request.POST["preco"]
+
+        caracteristicas = []
+        for caracteristica in TipoCaracteristica.objects.filter(tipo=tipo_id):
+            caracteristicas.append([caracteristica.id, request.POST[str(caracteristica.id)]])
+
+        parceiros = Parceiro.objects.all()
+        tipos = Tipo.objects.all()
+
+        consulta = " select li.id as id, li.nome as nome,    lt.nome as tipo,    lf.nome as fabricante,  li.preco as preco from loja_instrumento li left join loja_tipo lt on lt.id = li.tipo_id left join loja_fabricante lf on lf.id = li.fabricante_id left join loja_instrumentocaracteristica lic on lic.instrumento_id = li.id "
+        consulta += " where "
+
+        consulta += " ( li.tipo_id = " + str(tipo_id) + " ) "
+
+        consulta += " and ( upper(li.nome) like upper(concat('%%', '" + nome + "', '%%')) or "
+        if nome == '':
+            consulta += 'null'
+        else:
+            consulta += "'" + nome + "'"
+        consulta += " is null) "
+
+        consulta += " and ( upper(lf.nome) like upper(concat('%%', '" + fabricante + "', '%%')) or "
+        if fabricante == '':
+            consulta += 'null'
+        else:
+            consulta += "'" + fabricante + "'"
+        consulta += " is null) "
+
+        consulta += " and ( li.preco = '" + preco + "' or "
+        if preco == '':
+            consulta += 'null'
+        else:
+            consulta += "'" + preco + "'"
+        consulta += " is null) "
+
+        for caracteristica in caracteristicas:
+            consulta += " and ( (lic.tipo_caracteristica_id = " + str(caracteristica[0]) + " and lic.valor = "
+
+            if not caracteristica[1]:
+                consulta += "''"
+            else:
+                consulta += "'" + caracteristica[1] + "'"
+
+            consulta += ") or ("
+            if caracteristica[1] == '':
+                consulta += 'null'
+            else:
+                consulta += "'" + caracteristica[1] + "'"
+            consulta += " is null) ) "
+
+        consulta += " group by 1,2,3,4,5 "
+
+        instrumentos = InstrumentoDTO.objects.raw(consulta)
+    else:
+        instrumentos = InstrumentoDTO.objects.raw("select   li.id as id,    li.nome as nome,    lt.nome as tipo,    lf.nome as fabricante,  li.preco as preco from loja_instrumento li left join loja_tipo lt on lt.id = li.tipo_id left join loja_fabricante lf on lf.id = li.fabricante_id")
+
+    return render_to_response('index.html', locals(), context_instance=RequestContext(request))
+
+
+@csrf_exempt
+def add(request):
+    parceiros = Parceiro.objects.all()
+    tipos = Tipo.objects.all()
+    fabricantes = Fabricante.objects.all()
+
+    if request.method == "POST":
+        tipo_id = request.POST["tipo"]
+
+        nome = request.POST["nome"]
+        fabricante = request.POST["fabricante"]
+        preco = request.POST["preco"]
+
+        # TODO Alison: Fazer o request.POST da imagem enviada, validando se ela foi ou não enviada
 
         caracteristicas = []
         for caracteristica in TipoCaracteristica.objects.filter(tipo=tipo_id):

@@ -52,21 +52,30 @@
        <a class="brand" href="{% url "loja.views.index" %}"> Rick' Store </a>
        <div class="nav-collapse" id="main-menu">
         <ul class="nav" id="main-menu-left">
+          
 
-          <li class="dropdown" id="preview-menu">
+          <li>
+            <a onclick="buscaInstrumentos();" href="javascript:void(0);">Buscar instrumentos</a>
+          </li>
+
+          <li>
+            <a onclick="novoInstrumento();" href="javascript:void(0);">Novo instrumento</a>
+          </li>
+
+          <!--{# <li class="dropdown" id="preview-menu">
             <a class="dropdown-toggle" rel="tooltip" title="Buscar instrumentos" data-toggle="dropdown" href=""> Buscar instrumentos <b class="caret"></b></a>
             <ul class="dropdown-menu" id="cbx_tipos">
               {% for tipo in tipos %}
               <li><a class="busca_ajax" href="javascript:void(0);" onclick="$('#filtro').hide();buscar_ajax({{ tipo.id }});">{{ tipo }}</a></li>
               {% endfor %}
             </ul>
-          </li>
+          </li> #}-->
 
           <li class="dropdown" id="preview-menu">
             <a class="dropdown-toggle" rel="tooltip" title="Veja nossos Parceiros!" data-toggle="dropdown" href="#"> Parceiros <b class="caret"></b></a>
             <ul class="dropdown-menu">
               {% for parceiro in parceiros %}
-              <li><a href="http://{{ parceiro.site }}">{{ parceiro }}</a></li>
+              <li><a target="_blank" href="http://{{ parceiro.site }}">{{ parceiro }}</a></li>
               {% endfor %}
             </ul>
           </li>

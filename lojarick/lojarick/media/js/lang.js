@@ -21,7 +21,32 @@ function buscar_ajax(tipo_id) {
 
 
 function novoInstrumento(){
-    $('#formNovoInstrumento')[0].reset();
+    $("#modal_footer_btns").empty();
+    $("#modal_footer_btns").append("<a href='#' class='btn' data-dismiss='modal'>Cancelar</a><input type='submit' class='btn title_black' value = 'Salvar' style='height: 48px;width: 90px;margin-left: 5px;'>");
+    $("#modal_title").empty();
+    $("#modal_title").append("Adicionar instrumento");
+
+    cleanAndShowModalForm();
+
+    $("#formInstrumento").prop("action","/add/");
+    $("#formInstrumento").prop("method","post");
+};
+
+
+function buscaInstrumentos(){
+    $("#modal_footer_btns").empty();
+    $("#modal_footer_btns").append("<a href='#' class='btn' data-dismiss='modal'>Cancelar</a><input type='submit' class='btn title_black' value = 'Buscar' style='height: 48px;width: 90px;margin-left: 5px;'>");
+    $("#modal_title").empty();
+    $("#modal_title").append("Buscar instrumentos");
+
+    cleanAndShowModalForm();
+
+    $("#formInstrumento").prop("action","/buscar/");
+    $("#formInstrumento").prop("method","post");
+};
+
+function cleanAndShowModalForm(){
+    $('#formInstrumento')[0].reset();
     $('#caracteristicas').empty();
     $('#test_modal').modal('show');
 };
