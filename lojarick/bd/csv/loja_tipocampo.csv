@@ -1,0 +1,4 @@
+id,"nome","mascara"
+1,"Sem máscara","type=\"text\""
+2,"Inteiro não negativo","type=\"number\" min=\"0\""
+3,"Booleano","type=\"checkbox\""
