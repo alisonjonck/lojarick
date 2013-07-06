@@ -25,6 +25,7 @@ function novoInstrumento(){
     $("#modal_footer_btns").append("<a href='#' class='btn' data-dismiss='modal'>Cancelar</a><input type='submit' class='btn title_black' value = 'Salvar' style='height: 48px;width: 90px;margin-left: 5px;'>");
     $("#modal_title").empty();
     $("#modal_title").append("Adicionar instrumento");
+    $("#row_input_foto").show();
 
     cleanAndShowModalForm();
 
@@ -38,6 +39,7 @@ function buscaInstrumentos(){
     $("#modal_footer_btns").append("<a href='#' class='btn' data-dismiss='modal'>Cancelar</a><input type='submit' class='btn title_black' value = 'Buscar' style='height: 48px;width: 90px;margin-left: 5px;'>");
     $("#modal_title").empty();
     $("#modal_title").append("Buscar instrumentos");
+    $("#row_input_foto").hide();
 
     cleanAndShowModalForm();
 

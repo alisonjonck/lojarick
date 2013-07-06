@@ -6,7 +6,7 @@
                 </div>
             </h3>
         </div>
-        <form id="formInstrumento">
+        <form id="formInstrumento" enctype="multipart/form-data">
         <div class="modal-body" style="border: 1px solid;">
             <div id="conteudo">
                 
@@ -14,7 +14,7 @@
                     {# {% csrf_token %} {{ form.as_p }} #}
                     <table>
                         <tr>
-                            <td>
+                            <td style="text-align:right">
                                 <label for="nome" style="font-weight: bold; color: #3a87ad;">Modelo</label>
                             </td>
                             <td>
@@ -22,7 +22,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="text-align:right">
                                 <label for="tipo" style="font-weight: bold; color: #3a87ad;">Tipo</label>
                             </td>
                             <td>
@@ -35,7 +35,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="text-align:right">
                                 <label for="fabricante" style="font-weight: bold; color: #3a87ad;">Fabricante</label>
                             </td>
                             <td>
@@ -48,19 +48,19 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>
+                            <td style="text-align:right">
                                 <label for="preco" style="font-weight: bold; color: #3a87ad;">Preço</label>
                             </td>
                             <td>
                                 <input id="id_preco" name="preco" type="text" maxlength="12">
                             </td>
                         </tr>
-                        <tr>
-                            <td>
+                        <tr id="row_input_foto">
+                            <td style="text-align:right">
                                 <label for="foto" style="font-weight: bold; color: #3a87ad;">Foto</label>
                             </td>
                             <td>
-                                <input id="id_foto" name="foto" type="file">
+                                <input id="id_foto" accept="image/*" name="foto" type="file">
                             </td>
                         </tr>
                     </table>

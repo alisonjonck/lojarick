@@ -7,6 +7,7 @@ from django.utils import simplejson
 from django.http import HttpResponse
 from django.db import models
 from forms import InstrumentoForm
+from decimal import Decimal
 
 
 def index(request):
@@ -33,11 +34,11 @@ def gerar_form_cadastro(request):
     if request.is_ajax() and request.method == "POST":
         mimetype = "application/json"
         tipo_id = request.POST["tipo"]
-        form_busca = "<table><tr>"
+        form_cadastro = "<table><tr>"
 
-        form_busca += montarFormCaracteristica(tipo_id, False)
+        form_cadastro += montarFormCaracteristica(tipo_id, False)
 
-        data = simplejson.dumps(form_busca)
+        data = simplejson.dumps(form_cadastro)
         return HttpResponse(data, mimetype)
     else:
         return HttpResponse("This is not an valid request")
@@ -227,66 +228,43 @@ def add(request):
     fabricantes = Fabricante.objects.all()
 
     if request.method == "POST":
+        instrumento = Instrumento()
+
         tipo_id = request.POST["tipo"]
+        instrumento.tipo = Tipo.objects.get(pk=tipo_id)
+        instrumento.nome = request.POST["nome"]
+        instrumento.fabricante = Fabricante.objects.get(pk=request.POST["fabricante"])
+        preco_post = request.POST["preco"]
+        preco_post = preco_post.replace('.', '')
+        preco_post = preco_post.replace(',', '')
+        instrumento.preco = Decimal(preco_post)
 
-        nome = request.POST["nome"]
-        fabricante = request.POST["fabricante"]
-        preco = request.POST["preco"]
+        try:
+            f = request.FILES["foto"]
+            instrumento.foto = 'img/' + str(f)
 
-        # TODO Alison: Fazer o request.POST da imagem enviada, validando se ela foi ou não enviada
+            with open('/Users/alisonjonck/Desktop/Joice/LojaRick/lojarick/lojarick/media/img/' + str(f), 'wb+') as destination:
+                for chunk in f.chunks():
+                    destination.write(chunk)
+        except:
+            f = None
 
-        caracteristicas = []
-        for caracteristica in TipoCaracteristica.objects.filter(tipo=tipo_id):
-            caracteristicas.append([caracteristica.id, request.POST[str(caracteristica.id)]])
+        instrumento.save()
 
-        parceiros = Parceiro.objects.all()
-        tipos = Tipo.objects.all()
-
-        consulta = " select li.id as id, li.nome as nome,    lt.nome as tipo,    lf.nome as fabricante,  li.preco as preco from loja_instrumento li left join loja_tipo lt on lt.id = li.tipo_id left join loja_fabricante lf on lf.id = li.fabricante_id left join loja_instrumentocaracteristica lic on lic.instrumento_id = li.id "
-        consulta += " where "
-
-        consulta += " ( li.tipo_id = " + str(tipo_id) + " ) "
-
-        consulta += " and ( upper(li.nome) like upper(concat('%%', '" + nome + "', '%%')) or "
-        if nome == '':
-            consulta += 'null'
-        else:
-            consulta += "'" + nome + "'"
-        consulta += " is null) "
-
-        consulta += " and ( upper(lf.nome) like upper(concat('%%', '" + fabricante + "', '%%')) or "
-        if fabricante == '':
-            consulta += 'null'
-        else:
-            consulta += "'" + fabricante + "'"
-        consulta += " is null) "
-
-        consulta += " and ( li.preco = '" + preco + "' or "
-        if preco == '':
-            consulta += 'null'
-        else:
-            consulta += "'" + preco + "'"
-        consulta += " is null) "
-
+        caracteristicas = TipoCaracteristica.objects.filter(tipo=tipo_id)
         for caracteristica in caracteristicas:
-            consulta += " and ( (lic.tipo_caracteristica_id = " + str(caracteristica[0]) + " and lic.valor = "
 
-            if not caracteristica[1]:
-                consulta += "''"
-            else:
-                consulta += "'" + caracteristica[1] + "'"
+            valor_post = request.POST[str(caracteristica.id)]
+            if not valor_post:
+                continue
 
-            consulta += ") or ("
-            if caracteristica[1] == '':
-                consulta += 'null'
-            else:
-                consulta += "'" + caracteristica[1] + "'"
-            consulta += " is null) ) "
+            instrumento_caracteristica = InstrumentoCaracteristica()
 
-        consulta += " group by 1,2,3,4,5 "
+            instrumento_caracteristica.tipo_caracteristica = TipoCaracteristica.objects.get(pk=caracteristica.id)
+            instrumento_caracteristica.instrumento = instrumento
+            instrumento_caracteristica.valor = valor_post
 
-        instrumentos = InstrumentoDTO.objects.raw(consulta)
-    else:
-        instrumentos = InstrumentoDTO.objects.raw("select   li.id as id,    li.nome as nome,    lt.nome as tipo,    lf.nome as fabricante,  li.preco as preco from loja_instrumento li left join loja_tipo lt on lt.id = li.tipo_id left join loja_fabricante lf on lf.id = li.fabricante_id")
+            instrumento_caracteristica.save()
 
+    instrumentos = InstrumentoDTO.objects.raw("select   li.id as id,    li.nome as nome,    lt.nome as tipo,    lf.nome as fabricante,  li.preco as preco from loja_instrumento li left join loja_tipo lt on lt.id = li.tipo_id left join loja_fabricante lf on lf.id = li.fabricante_id")
     return render_to_response('index.html', locals(), context_instance=RequestContext(request))
