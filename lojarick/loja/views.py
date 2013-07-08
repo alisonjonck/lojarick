@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from django.db import models
 from forms import InstrumentoForm
 from decimal import Decimal
+from hashlib import md5
+from datetime import datetime
 
 
 def index(request):
@@ -132,7 +134,9 @@ def ver_instrumento(request):
         caracteristicas = InstrumentoCaracteristica.objects.filter(instrumento=instrumento_id)
         grid = "<table><tr><td>"
         if instrumento.foto:
-            grid += "<img src='" + instrumento.foto.url + "' width='250' style='border: 1px solid;'/>" + "</td><td>&nbsp;</td><td>"
+            grid += "<img src='" + instrumento.foto.url + "' height='250' style='border: 1px solid;max-height: 300px;'/>" + "</td><td>&nbsp;</td><td>"
+        else:
+            grid += "<img src='/media/img/sem-imagem.jpg' height='250' width='210' style='border: 1px solid;'/>" + "</td><td>&nbsp;</td><td>"
 
         grid += "<p class='label_form'>Modelo: " + instrumento.nome
         grid += "</p><p class='label_form'>Tipo: " + instrumento.tipo.nome
@@ -142,8 +146,8 @@ def ver_instrumento(request):
         for caract in caracteristicas:
             grid += "<p class='label_form'>" + caract.tipo_caracteristica.nome + ": " + caract.valor + "</p>"
 
-        grid += "</td></tr><tr><td colspan=3>"
-        grid += "<a style='float:right;' class='btn btn-primary' href=''> Voltar </a></td></tr></table>"
+        grid += "</td></tr></table>"
+        grid += "<a style='float:right;margin-top: -20px;' class='btn btn-primary' href=''> Voltar </a>"
 
         data = simplejson.dumps(grid)
         return HttpResponse(data, mimetype)
@@ -235,15 +239,17 @@ def add(request):
         instrumento.nome = request.POST["nome"]
         instrumento.fabricante = Fabricante.objects.get(pk=request.POST["fabricante"])
         preco_post = request.POST["preco"]
-        # preco_post = preco_post.replace('.', '')
-        preco_post = preco_post.replace(',', '')
+        preco_post = preco_post.replace('.', '')
+        preco_post = preco_post.replace(',', '.')
         instrumento.preco = Decimal(preco_post)
 
         try:
             f = request.FILES["foto"]
-            instrumento.foto = 'img/' + str(f)
+            nomeFoto = md5(str(datetime.now())).hexdigest()
 
-            with open('/Users/alisonjonck/Desktop/Joice/LojaRick/lojarick/lojarick/media/img/' + str(f), 'wb+') as destination:
+            instrumento.foto = 'img/' + nomeFoto + '.jpg'
+
+            with open('/Users/alisonjonck/Desktop/Joice/LojaRick/lojarick/lojarick/media/img/' + nomeFoto + '.jpg', 'wb+') as destination:
                 for chunk in f.chunks():
                     destination.write(chunk)
         except:
