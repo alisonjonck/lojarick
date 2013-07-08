@@ -7,7 +7,7 @@
             </h3>
         </div>
         <form id="formInstrumento" enctype="multipart/form-data">
-        <div class="modal-body" style="border: 1px solid;">
+        <div class="modal-body" > <!--style="border: 1px solid;"-->
             <div id="conteudo">
                 
 
@@ -15,7 +15,7 @@
                     <table>
                         <tr>
                             <td style="text-align:right">
-                                <label for="nome" style="font-weight: bold; color: #3a87ad;">Modelo</label>
+                                <label for="nome" class='label_form'>Modelo</label>
                             </td>
                             <td>
                                 <input type="text" id="id_nome" name="nome">
@@ -23,7 +23,7 @@
                         </tr>
                         <tr>
                             <td style="text-align:right">
-                                <label for="tipo" style="font-weight: bold; color: #3a87ad;">Tipo</label>
+                                <label for="tipo" class='label_form'>Tipo</label>
                             </td>
                             <td>
                                 <select id="id_tipo" name="tipo">
@@ -36,7 +36,7 @@
                         </tr>
                         <tr>
                             <td style="text-align:right">
-                                <label for="fabricante" style="font-weight: bold; color: #3a87ad;">Fabricante</label>
+                                <label for="fabricante" class='label_form'>Fabricante</label>
                             </td>
                             <td>
                                 <select id="id_fabricante" name="fabricante">
@@ -49,7 +49,7 @@
                         </tr>
                         <tr>
                             <td style="text-align:right">
-                                <label for="preco" style="font-weight: bold; color: #3a87ad;">Preço</label>
+                                <label for="preco" class='label_form'>Preço</label>
                             </td>
                             <td>
                                 <input id="id_preco" name="preco" type="text" maxlength="12">
@@ -57,15 +57,15 @@
                         </tr>
                         <tr id="row_input_foto">
                             <td style="text-align:right">
-                                <label for="foto" style="font-weight: bold; color: #3a87ad;">Foto</label>
+                                <label for="foto" class='label_form'>Foto</label>
                             </td>
                             <td>
                                 <input id="id_foto" accept="image/*" name="foto" type="file">
                             </td>
                         </tr>
                     </table>
-
-                    <div id="caracteristicas">
+                    <hr/>
+                    <div id="caracteristicas" style="text-align:right">
 
                     </div>
             </div>

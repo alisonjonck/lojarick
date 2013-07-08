@@ -80,7 +80,7 @@ def montarFormCaracteristica(tipo_id, is_search):
 
         form_busca2 += "<td>"
         form_busca2 += "<label for='"
-        form_busca2 += str(caract.id) + "' style='font-weight: bold; color: #3a87ad;'>"
+        form_busca2 += str(caract.id) + "' class='label_form'>"
         form_busca2 += caract.nome + "</label>"
 
         if not is_search:
@@ -134,13 +134,13 @@ def ver_instrumento(request):
         if instrumento.foto:
             grid += "<img src='" + instrumento.foto.url + "' width='250' style='border: 1px solid;'/>" + "</td><td>&nbsp;</td><td>"
 
-        grid += "<p>Modelo: " + instrumento.nome
-        grid += "</p><p>Tipo: " + instrumento.tipo.nome
-        grid += "</p><p>Fabricante: " + instrumento.fabricante.nome
-        grid += "</p><p>Pre&ccedil;o: R$" + str(instrumento.preco) + "</p>"
+        grid += "<p class='label_form'>Modelo: " + instrumento.nome
+        grid += "</p><p class='label_form'>Tipo: " + instrumento.tipo.nome
+        grid += "</p><p class='label_form'>Fabricante: " + instrumento.fabricante.nome
+        grid += "</p><p class='label_form'>Pre&ccedil;o: R$ " + str(instrumento.preco) + "</p>"
 
         for caract in caracteristicas:
-            grid += "<p>" + caract.tipo_caracteristica.nome + ": " + caract.valor + "</p>"
+            grid += "<p class='label_form'>" + caract.tipo_caracteristica.nome + ": " + caract.valor + "</p>"
 
         grid += "</td></tr><tr><td colspan=3>"
         grid += "<a style='float:right;' class='btn btn-primary' href=''> Voltar </a></td></tr></table>"
@@ -235,7 +235,7 @@ def add(request):
         instrumento.nome = request.POST["nome"]
         instrumento.fabricante = Fabricante.objects.get(pk=request.POST["fabricante"])
         preco_post = request.POST["preco"]
-        preco_post = preco_post.replace('.', '')
+        # preco_post = preco_post.replace('.', '')
         preco_post = preco_post.replace(',', '')
         instrumento.preco = Decimal(preco_post)
 
