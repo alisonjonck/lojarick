@@ -194,6 +194,13 @@ def buscar(request):
             consulta += "'" + fabricante + "'"
         consulta += " is null) "
 
+        try:
+            preco = preco.replace('.', '')
+            preco = preco.replace(',', '.')
+            preco = str(Decimal(preco))
+        except:
+            preco = ''
+
         consulta += " and ( li.preco = '" + preco + "' or "
         if preco == '':
             consulta += 'null'
